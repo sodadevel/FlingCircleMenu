@@ -77,7 +77,7 @@ public class FlingCircleMenuLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int count = getChildCount();
-        float eachAngle = 360.f / count;
+        float eachAngle = (float) (2 * Math.PI / count);
         for (int i = 0; i < count; i++) {
             View thisView = getChildAt(i);
             float thisAngle = i * eachAngle + offsetAngle + lastAngle + flingAngle;
@@ -85,12 +85,12 @@ public class FlingCircleMenuLayout extends ViewGroup {
             int anchor = thisView.getMeasuredWidth() > thisView.getMeasuredHeight() ?
                     thisView.getMeasuredWidth() : thisView.getMeasuredHeight();
 
-            float x = (float) (Math.cos(Math.toRadians(thisAngle)) *
+            float x = (float) (Math.cos(thisAngle) *
                     ((getMeasuredWidth() - anchor) / 2.0f))
                     + getMeasuredWidth() / 2.0f
                     - thisView.getMeasuredWidth() / 2;
             float y = getMeasuredHeight() / 2.0f
-                    - (float) (Math.sin(Math.toRadians(thisAngle)) *
+                    - (float) (Math.sin(thisAngle) *
                     ((getMeasuredHeight() - anchor) / 2.0f))
                     - thisView.getMeasuredHeight() / 2;
 
@@ -160,11 +160,11 @@ public class FlingCircleMenuLayout extends ViewGroup {
         float mCos = (x - getMeasuredWidth() / 2.0f) / getDistance(x, y, getMeasuredWidth() / 2.0f,
                 getMeasuredHeight() / 2.0f);
         double angleR = Math.acos(mCos);
-        double angleD = Math.toDegrees(angleR);
+//        double angleD = Math.toDegrees(angleR);
         if (y > getMeasuredHeight() / 2.0f) {
-            angleD = 360 - angleD;
+            angleR = 2*Math.PI - angleR;
         }
-        return angleD;
+        return angleR;
     }
 
     private float getDistance(float x1, float y1, float x2, float y2) {
@@ -194,7 +194,7 @@ public class FlingCircleMenuLayout extends ViewGroup {
             if (flingClockWise) {
                 radian = -radian;
             }
-            flingAngle = (float) Math.toDegrees(radian);
+            flingAngle = radian;
             requestLayout();
         }
     }
